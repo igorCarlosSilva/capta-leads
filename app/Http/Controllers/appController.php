@@ -7,6 +7,8 @@ use App\Http\Controllers\HttpRequest;
 use DOMDocument;
 use DOMXPath;
 use App\captaleads;
+use App\dadoslead;
+use Excel;
 class appController extends Controller
 {
     public function index($page){
@@ -85,5 +87,38 @@ class appController extends Controller
             }
         }*/
 
+    }
+
+    public function generate(){
+        $dados = dadoslead::offset(30001)->limit(40000)->get();
+
+        
+        Excel::create('matriculas', function($excel) use($dados){
+            
+                $excel->sheet('matriculas', function($sheet) use($dados) {
+
+                    $sheet->appendRow(array(
+                        'id','nome', 'email','sexo','telefone','cidade','estado','nome empresa','cargo','origem cadastro'
+                    ));
+                    foreach($dados as $dado){
+
+                        $sheet->appendRow(array(
+                            $dado->id,
+                            $dado->nome,
+                            $dado->email,
+                            $dado->sexo,
+                            $dado->telefone,
+                            $dado->cidade,
+                            $dado->estado,
+                            $dado->nomeempresa,
+                            $dado->cargo,
+                            $dado->origemcad
+                        ));
+                    }
+
+                });
+            
+            })->download('xls');
+            
     }
 }

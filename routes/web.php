@@ -17,3 +17,5 @@ Route::get('/', function () {
 
 Route::get('/getEmails/{page}', ['uses' => 'appController@index'])->name('next');
 Route::get('/getData', ['uses' => 'appController@getData'])->name('gdata');
+
+Route::get('/generate-xls', ['uses' => 'appController@generate']);
